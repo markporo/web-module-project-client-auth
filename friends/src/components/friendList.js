@@ -1,5 +1,7 @@
 import React, { useContext, useState } from "react";
 import { UserContext } from "./userContext";
+import { axiosWithAuth } from "../utils/axiosWithAuth";
+import { useHistory } from "react-router";
 
 import Friends from "./Friends"
 
@@ -13,6 +15,7 @@ const initialFriendData = {
 export default function FriendList() {
     const [newFriendData, setNewFriendData] = useState(initialFriendData);
     const { isLoading, setIsLoading } = useContext(UserContext);
+    let history = useHistory();
 
     const changeHandler = (e) => {
         setNewFriendData({
@@ -30,14 +33,22 @@ export default function FriendList() {
     //     });
     //   }
 
-    const addNewFriend = (e) => {
-        console.log(e)
+    const addNewFriend = () => {
+        axiosWithAuth().post('/friends', newFriendData)
+            .then(res => {
+                console.log("login", res);
+
+                history.push('/protected');
+            })
+            .catch(err => {
+                console.log(err);
+            })
     }
 
     return (
         <div>
             {isLoading ? "Loading FriendList..." : <Friends initialFriendData={initialFriendData} />}
-
+            <br />
             <form onSubmit={addNewFriend}>
                 <label> Name:
                     <input type="text" name="name" value={newFriendData.name} onChange={changeHandler} />

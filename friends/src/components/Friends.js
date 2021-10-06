@@ -18,14 +18,14 @@ const Friends = ({ initialFriendData }) => {
             .finally(() => {
 
             })
-    })
+    }, [])
 
 
     return (
         <div>
-            <h1>Your Best Bitches</h1>
+            <h1>Your Best Friends</h1>
             {console.log(friends)}
-            {friends.map(friend => (<div>{friend}</div>))}
+            {friends.map(friend => (<div>{friend.name}</div>))}
 
         </div>
     )
